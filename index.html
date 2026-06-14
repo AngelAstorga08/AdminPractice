@@ -1,2 +1,73 @@
-<!DOCTYPE html> 
-<html lang="es"> 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskManager | Agregar tarea</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>TaskManager Pro</h1>
+            <p>Agrega nuevas tareas</p>
+        </header>
+
+        <main>
+            <form id="taskForm">
+                <div class="form-group">
+                    <label>Título de la tarea</label>
+                    <input type="text" id="taskTitle" placeholder="Ej: Revisar informe" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <textarea id="taskDesc" placeholder="Describe la tarea..."></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        <select id="taskCategory">
+                            <option value="personal">Personal</option>
+                            <option value="trabajo">Trabajo</option>
+                            <option value="estudio">Estudio</option>
+                            <option value="hogar">Hogar</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Prioridad</label>
+                        <select id="taskPriority">
+                            <option value="baja">Baja</option>
+                            <option value="media">Media</option>
+                            <option value="alta">Alta</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label>Fecha límite</label>
+                        <input type="date" id="taskDueDate">
+                    </div>
+                </div>
+
+                <button type="submit" id="saveTaskBtn">Guardar tarea</button>
+            </form>
+
+            <div class="link-dashboard">
+                <a href="dashboard.html">Ir a gestionar tareas →</a>
+            </div>
+        </main>
+
+        <footer>
+            <p>TaskManager Pro - Control de Versiones</p>
+        </footer>
+    </div>
+
+    <script src="js/index.js"></script>
+</body>
+</html>

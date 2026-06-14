@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskManager | Gestionar Tareas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-tasks"></i>
+                <h2>TaskManager <span>Pro</span></h2>
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-plus-circle"></i> Agregar
+                </a>
+                <a href="dashboard.html" class="nav-link active">
+                    <i class="fas fa-list-check"></i> Gestionar
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <h1>Gestión de Tareas</h1>
+                <a href="index.html" class="btn-add">
+                    <i class="fas fa-plus"></i> Nueva tarea
+                </a>
+            </header>
+
+            <!-- Estadísticas -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-tasks"></i>
+                    <div>
+                        <h3 id="totalTasks">0</h3>
+                        <p>Total</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-check-circle"></i>
+                    <div>
+                        <h3 id="completedTasks">0</h3>
+                        <p>Completadas</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-hourglass-half"></i>
+                    <div>
+                        <h3 id="pendingTasks">0</h3>
+                        <p>Pendientes</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="filters">
+                <input type="text" id="searchInput" placeholder="Buscar tarea...">
+                <select id="categoryFilter">
+                    <option value="all">Todas las categorías</option>
+                    <option value="personal">Personal</option>
+                    <option value="trabajo">Trabajo</option>
+                    <option value="estudio">Estudio</option>
+                    <option value="hogar">Hogar</option>
+                </select>
+                <select id="statusFilter">
+                    <option value="all">Todas</option>
+                    <option value="pending">Pendientes</option>
+                    <option value="completed">Completadas</option>
+                </select>
+            </div>
+
+            <!-- Lista de tareas -->
+            <div class="tasks-container">
+                <div class="tasks-header">
+                    <span></span>
+                    <span>Tarea</span>
+                    <span>Categoría</span>
+                    <span>Prioridad</span>
+                    <span>Fecha</span>
+                    <span>Estado</span>
+                    <span></span>
+                </div>
+                <div id="tasksList">
+                    <!-- Las tareas se cargan aquí dinámicamente -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Editar -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Editar tarea</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="editTitle" placeholder="Título">
+                <textarea id="editDesc" placeholder="Descripción"></textarea>
+                <select id="editCategory">
+                    <option value="personal">Personal</option>
+                    <option value="trabajo">Trabajo</option>
+                    <option value="estudio">Estudio</option>
+                    <option value="hogar">Hogar</option>
+                </select>
+                <select id="editPriority">
+                    <option value="baja">Baja</option>
+                    <option value="media">Media</option>
+                    <option value="alta">Alta</option>
+                </select>
+                <input type="date" id="editDueDate">
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel">Cancelar</button>
+                <button class="btn-save">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
