@@ -24,12 +24,21 @@
                     <i class="fas fa-list-check"></i> Gestionar
                 </a>
             </nav>
+            <div class="sidebar-footer">
+                <div class="user-badge">
+                    <i class="fas fa-database"></i>
+                    <span>LocalStorage</span>
+                </div>
+            </div>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
             <header class="top-bar">
-                <h1>Gestión de Tareas</h1>
+                <div>
+                    <h1>Gestión de Tareas</h1>
+                    <p>Administra, edita y organiza tus tareas</p>
+                </div>
                 <a href="index.html" class="btn-add">
                     <i class="fas fa-plus"></i> Nueva tarea
                 </a>
@@ -38,55 +47,93 @@
             <!-- Estadísticas -->
             <div class="stats-grid">
                 <div class="stat-card">
-                    <i class="fas fa-tasks"></i>
-                    <div>
+                    <div class="stat-icon blue">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="stat-info">
                         <h3 id="totalTasks">0</h3>
-                        <p>Total</p>
+                        <p>Total tareas</p>
                     </div>
                 </div>
                 <div class="stat-card">
-                    <i class="fas fa-check-circle"></i>
-                    <div>
+                    <div class="stat-icon green">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
                         <h3 id="completedTasks">0</h3>
                         <p>Completadas</p>
                     </div>
                 </div>
                 <div class="stat-card">
-                    <i class="fas fa-hourglass-half"></i>
-                    <div>
+                    <div class="stat-icon yellow">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                    <div class="stat-info">
                         <h3 id="pendingTasks">0</h3>
                         <p>Pendientes</p>
                     </div>
                 </div>
+                <div class="stat-card">
+                    <div class="stat-icon red">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="overdueTasks">0</h3>
+                        <p>Vencidas</p>
+                    </div>
+                </div>
             </div>
 
-            <!-- Filtros -->
-            <div class="filters">
-                <input type="text" id="searchInput" placeholder="Buscar tarea...">
-                <select id="categoryFilter">
-                    <option value="all">Todas las categorías</option>
-                    <option value="personal">Personal</option>
-                    <option value="trabajo">Trabajo</option>
-                    <option value="estudio">Estudio</option>
-                    <option value="hogar">Hogar</option>
-                </select>
-                <select id="statusFilter">
-                    <option value="all">Todas</option>
-                    <option value="pending">Pendientes</option>
-                    <option value="completed">Completadas</option>
-                </select>
+            <!-- Filtros y búsqueda -->
+            <div class="filters-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar por título o descripción...">
+                </div>
+                <div class="filter-group">
+                    <i class="fas fa-tag"></i>
+                    <select id="categoryFilter">
+                        <option value="all">Todas las categorías</option>
+                        <option value="personal">📋 Personal</option>
+                        <option value="trabajo">💼 Trabajo</option>
+                        <option value="estudio">📚 Estudio</option>
+                        <option value="hogar">🏠 Hogar</option>
+                        <option value="proyecto">🚀 Proyecto</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <i class="fas fa-flag"></i>
+                    <select id="priorityFilter">
+                        <option value="all">Todas las prioridades</option>
+                        <option value="urgente">⚫ Urgente</option>
+                        <option value="alta">🔴 Alta</option>
+                        <option value="media">🟡 Media</option>
+                        <option value="baja">🟢 Baja</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <i class="fas fa-filter"></i>
+                    <select id="statusFilter">
+                        <option value="all">Todas</option>
+                        <option value="pending">⏳ Pendientes</option>
+                        <option value="completed">✅ Completadas</option>
+                    </select>
+                </div>
+                <button class="reset-btn" id="resetFiltersBtn">
+                    <i class="fas fa-undo-alt"></i> Limpiar
+                </button>
             </div>
 
-            <!-- Lista de tareas -->
+            <!-- Tabla de tareas -->
             <div class="tasks-container">
                 <div class="tasks-header">
-                    <span></span>
+                    <span style="width: 30px;"></span>
                     <span>Tarea</span>
                     <span>Categoría</span>
                     <span>Prioridad</span>
-                    <span>Fecha</span>
+                    <span>Fecha límite</span>
                     <span>Estado</span>
-                    <span></span>
+                    <span style="width: 80px;">Acciones</span>
                 </div>
                 <div id="tasksList">
                     <!-- Las tareas se cargan aquí dinámicamente -->
@@ -95,32 +142,51 @@
         </main>
     </div>
 
-    <!-- Modal Editar -->
+    <!-- Modal Editar Tarea -->
     <div class="modal" id="editModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Editar tarea</h3>
-                <button class="close-modal">&times;</button>
+                <h3><i class="fas fa-edit"></i> Editar tarea</h3>
+                <button class="close-modal" id="closeModalBtn">&times;</button>
             </div>
             <div class="modal-body">
-                <input type="text" id="editTitle" placeholder="Título">
-                <textarea id="editDesc" placeholder="Descripción"></textarea>
-                <select id="editCategory">
-                    <option value="personal">Personal</option>
-                    <option value="trabajo">Trabajo</option>
-                    <option value="estudio">Estudio</option>
-                    <option value="hogar">Hogar</option>
-                </select>
-                <select id="editPriority">
-                    <option value="baja">Baja</option>
-                    <option value="media">Media</option>
-                    <option value="alta">Alta</option>
-                </select>
-                <input type="date" id="editDueDate">
+                <div class="form-group">
+                    <label>Título *</label>
+                    <input type="text" id="editTitle" placeholder="Título de la tarea">
+                </div>
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <textarea id="editDesc" rows="3" placeholder="Descripción detallada..."></textarea>
+                </div>
+                <div class="row-2">
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        <select id="editCategory">
+                            <option value="personal">Personal</option>
+                            <option value="trabajo">Trabajo</option>
+                            <option value="estudio">Estudio</option>
+                            <option value="hogar">Hogar</option>
+                            <option value="proyecto">Proyecto</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Prioridad</label>
+                        <select id="editPriority">
+                            <option value="baja">Baja</option>
+                            <option value="media">Media</option>
+                            <option value="alta">Alta</option>
+                            <option value="urgente">Urgente</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Fecha límite</label>
+                    <input type="date" id="editDueDate">
+                </div>
             </div>
             <div class="modal-footer">
-                <button class="btn-cancel">Cancelar</button>
-                <button class="btn-save">Guardar</button>
+                <button class="btn-cancel" id="cancelEditBtn">Cancelar</button>
+                <button class="btn-save" id="saveEditBtn">Guardar cambios</button>
             </div>
         </div>
     </div>
