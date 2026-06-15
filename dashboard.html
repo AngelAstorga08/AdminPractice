@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaskManager | Gestionar Tareas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
     <div class="app">
-        <!-- Sidebar -->
+
         <aside class="sidebar">
             <div class="logo">
-                <i class="fas fa-tasks"></i>
+                <i class="fas fa-leaf"></i>
                 <h2>TaskManager <span>Pro</span></h2>
             </div>
             <nav class="nav">
@@ -33,11 +33,10 @@
             </div>
         </aside>
 
-        <!-- Main Content -->
         <main class="main-content">
             <header class="top-bar">
                 <div>
-                    <h1>Gestión de Tareas</h1>
+                    <h1>Gestión de tareas</h1>
                     <p>Administra, edita y organiza tus tareas</p>
                 </div>
                 <a href="index.html" class="btn-add">
@@ -45,39 +44,30 @@
                 </a>
             </header>
 
-            <!-- Estadísticas -->
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-icon blue">
-                        <i class="fas fa-tasks"></i>
-                    </div>
+                    <div class="stat-icon blue"><i class="fas fa-tasks"></i></div>
                     <div class="stat-info">
                         <h3 id="totalTasks">0</h3>
                         <p>Total tareas</p>
                     </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon green">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
+                    <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
                     <div class="stat-info">
                         <h3 id="completedTasks">0</h3>
                         <p>Completadas</p>
                     </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon yellow">
-                        <i class="fas fa-hourglass-half"></i>
-                    </div>
+                    <div class="stat-icon yellow"><i class="fas fa-hourglass-half"></i></div>
                     <div class="stat-info">
                         <h3 id="pendingTasks">0</h3>
                         <p>Pendientes</p>
                     </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon red">
-                        <i class="fas fa-clock"></i>
-                    </div>
+                    <div class="stat-icon red"><i class="fas fa-clock"></i></div>
                     <div class="stat-info">
                         <h3 id="overdueTasks">0</h3>
                         <p>Vencidas</p>
@@ -85,7 +75,6 @@
                 </div>
             </div>
 
-            <!-- Filtros y búsqueda -->
             <div class="filters-bar">
                 <div class="search-box">
                     <i class="fas fa-search"></i>
@@ -125,9 +114,7 @@
                 </button>
             </div>
 
-            <!-- SPLIT: Gráfica a la izquierda - Lista de tareas a la derecha -->
             <div class="split-layout">
-                <!-- Columna izquierda: Gráfica -->
                 <div class="split-left">
                     <div class="chart-card">
                         <div class="chart-header">
@@ -137,7 +124,6 @@
                     </div>
                 </div>
 
-                <!-- Columna derecha: Lista de tareas -->
                 <div class="split-right">
                     <div class="tasks-container">
                         <div class="tasks-header">
@@ -149,16 +135,14 @@
                             <span>Estado</span>
                             <span style="width: 80px;">Acciones</span>
                         </div>
-                        <div id="tasksList">
-                            <!-- Las tareas se cargan aquí dinámicamente -->
-                        </div>
+                        <div id="tasksList"></div>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Modal Editar Tarea -->
+    <!-- Modal Editar -->
     <div class="modal" id="editModal">
         <div class="modal-content">
             <div class="modal-header">

@@ -4,22 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaskManager | Agregar tarea</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
+
         <div class="header">
             <div class="logo">
-                <i class="fas fa-tasks"></i>
+                <i class="fas fa-leaf"></i>
                 <h1>TaskManager <span>Pro</span></h1>
             </div>
             <p class="subtitle">Agrega nuevas tareas de forma rápida y sencilla</p>
         </div>
 
-        <!-- Formulario -->
         <div class="form-card">
             <div class="form-title">
                 <i class="fas fa-plus-circle"></i>
@@ -46,7 +45,6 @@
                         <option value="hogar">🏠 Hogar</option>
                     </select>
                 </div>
-
                 <div class="form-group">
                     <label><i class="fas fa-flag"></i> Prioridad</label>
                     <select id="taskPriority">
@@ -64,26 +62,24 @@
                 </div>
             </div>
 
-           <button class="btn-primary" id="saveTaskBtn">
-    <i class="fas fa-save"></i> Guardar tarea
-</button>
+            <button class="btn-primary" id="saveTaskBtn">
+                <i class="fas fa-check"></i> Guardar tarea
+            </button>
 
-<div class="success-message" id="successMsg">
-    <i class="fas fa-check-circle"></i> ¡Tarea agregada exitosamente!
-</div>
+            <div class="success-message" id="successMsg">
+                <i class="fas fa-check-circle"></i> ¡Tarea agregada exitosamente!
+            </div>
         </div>
 
-        <!-- Link al Dashboard -->
         <div class="dashboard-link">
             <a href="dashboard.html">
-                <i class="fas fa-chart-line"></i> Ver Dashboard de gestión
+                <i class="fas fa-list-check"></i> Ver todas las tareas
                 <i class="fas fa-arrow-right"></i>
             </a>
         </div>
 
-        <!-- Footer -->
         <footer>
-            <p>TaskManager Pro - Control de Versiones</p>
+            <p>TaskManager Pro · Control de versiones</p>
         </footer>
     </div>
 
