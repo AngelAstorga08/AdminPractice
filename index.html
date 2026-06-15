@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskManager | Agregar tarea</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <div class="container">
+
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-leaf"></i>
+                <h1>TaskManager <span>Pro</span></h1>
+            </div>
+            <p class="subtitle">Agrega nuevas tareas de forma rápida y sencilla</p>
+        </div>
+
+        <div class="form-card">
+            <div class="form-title">
+                <i class="fas fa-plus-circle"></i>
+                Nueva tarea
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-heading"></i> Título *</label>
+                <input type="text" id="taskTitle" placeholder="Ej: Revisar informe mensual" autocomplete="off">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-align-left"></i> Descripción</label>
+                <textarea id="taskDesc" placeholder="Describe la tarea en detalle..."></textarea>
+            </div>
+
+            <div class="row-2">
+                <div class="form-group">
+                    <label><i class="fas fa-tag"></i> Categoría</label>
+                    <select id="taskCategory">
+                        <option value="personal">📋 Personal</option>
+                        <option value="trabajo">💼 Trabajo</option>
+                        <option value="estudio">📚 Estudio</option>
+                        <option value="hogar">🏠 Hogar</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-flag"></i> Prioridad</label>
+                    <select id="taskPriority">
+                        <option value="baja">🟢 Baja</option>
+                        <option value="media">🟡 Media</option>
+                        <option value="alta">🔴 Alta</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row-2">
+                <div class="form-group">
+                    <label><i class="fas fa-calendar"></i> Fecha límite</label>
+                    <input type="date" id="taskDueDate">
+                </div>
+            </div>
+
+            <button class="btn-primary" id="saveTaskBtn">
+                <i class="fas fa-check"></i> Guardar tarea
+            </button>
+
+            <div class="success-message" id="successMsg">
+                <i class="fas fa-check-circle"></i> ¡Tarea agregada exitosamente!
+            </div>
+        </div>
+
+        <div class="dashboard-link">
+            <a href="dashboard.html">
+                <i class="fas fa-list-check"></i> Ver todas las tareas
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <footer>
+            <p>TaskManager Pro · Control de versiones</p>
+        </footer>
+    </div>
+
+    <script src="js/index.js"></script>
+</body>
+</html>

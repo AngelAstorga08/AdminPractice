@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskManager | Gestionar Tareas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <div class="app">
+
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-leaf"></i>
+                <h2>TaskManager <span>Pro</span></h2>
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-plus-circle"></i> Agregar
+                </a>
+                <a href="dashboard.html" class="nav-link active">
+                    <i class="fas fa-list-check"></i> Gestionar
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-badge">
+                    <i class="fas fa-database"></i>
+                    <span>LocalStorage</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <div>
+                    <h1>Gestión de tareas</h1>
+                    <p>Administra, edita y organiza tus tareas</p>
+                </div>
+                <a href="index.html" class="btn-add">
+                    <i class="fas fa-plus"></i> Nueva tarea
+                </a>
+            </header>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class="fas fa-tasks"></i></div>
+                    <div class="stat-info">
+                        <h3 id="totalTasks">0</h3>
+                        <p>Total tareas</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-info">
+                        <h3 id="completedTasks">0</h3>
+                        <p>Completadas</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon yellow"><i class="fas fa-hourglass-half"></i></div>
+                    <div class="stat-info">
+                        <h3 id="pendingTasks">0</h3>
+                        <p>Pendientes</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red"><i class="fas fa-clock"></i></div>
+                    <div class="stat-info">
+                        <h3 id="overdueTasks">0</h3>
+                        <p>Vencidas</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filters-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar por título o descripción...">
+                </div>
+                <div class="filter-group">
+                    <i class="fas fa-tag"></i>
+                    <select id="categoryFilter">
+                        <option value="all">Todas las categorías</option>
+                        <option value="personal">📋 Personal</option>
+                        <option value="trabajo">💼 Trabajo</option>
+                        <option value="estudio">📚 Estudio</option>
+                        <option value="hogar">🏠 Hogar</option>
+                        <option value="proyecto">🚀 Proyecto</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <i class="fas fa-flag"></i>
+                    <select id="priorityFilter">
+                        <option value="all">Todas las prioridades</option>
+                        <option value="urgente">⚫ Urgente</option>
+                        <option value="alta">🔴 Alta</option>
+                        <option value="media">🟡 Media</option>
+                        <option value="baja">🟢 Baja</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <i class="fas fa-filter"></i>
+                    <select id="statusFilter">
+                        <option value="all">Todas</option>
+                        <option value="pending">⏳ Pendientes</option>
+                        <option value="completed">✅ Completadas</option>
+                    </select>
+                </div>
+                <button class="reset-btn" id="resetFiltersBtn">
+                    <i class="fas fa-undo-alt"></i> Limpiar
+                </button>
+            </div>
+
+            <div class="split-layout">
+                <div class="split-left">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-pie"></i> Tareas por categoría</h3>
+                        </div>
+                        <canvas id="categoryChart" style="height: 280px; width: 100%;"></canvas>
+                    </div>
+                </div>
+
+                <div class="split-right">
+                    <div class="tasks-container">
+                        <div class="tasks-header">
+                            <span style="width: 30px;"></span>
+                            <span>Tarea</span>
+                            <span>Categoría</span>
+                            <span>Prioridad</span>
+                            <span>Fecha límite</span>
+                            <span>Estado</span>
+                            <span style="width: 80px;">Acciones</span>
+                        </div>
+                        <div id="tasksList"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Editar -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Editar tarea</h3>
+                <button class="close-modal" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Título *</label>
+                    <input type="text" id="editTitle" placeholder="Título de la tarea">
+                </div>
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <textarea id="editDesc" rows="3" placeholder="Descripción detallada..."></textarea>
+                </div>
+                <div class="row-2">
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        <select id="editCategory">
+                            <option value="personal">Personal</option>
+                            <option value="trabajo">Trabajo</option>
+                            <option value="estudio">Estudio</option>
+                            <option value="hogar">Hogar</option>
+                            <option value="proyecto">Proyecto</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Prioridad</label>
+                        <select id="editPriority">
+                            <option value="baja">Baja</option>
+                            <option value="media">Media</option>
+                            <option value="alta">Alta</option>
+                            <option value="urgente">Urgente</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Fecha límite</label>
+                    <input type="date" id="editDueDate">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" id="cancelEditBtn">Cancelar</button>
+                <button class="btn-save" id="saveEditBtn">Guardar cambios</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

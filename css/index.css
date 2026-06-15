@@ -1,0 +1,248 @@
+/* ========== INDEX.CSS - TaskManager Pro ========== */
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f0f4f0;
+    min-height: 100vh;
+    color: #1a2e1a;
+    line-height: 1.6;
+    padding: 48px 20px 64px;
+}
+
+.container {
+    max-width: 620px;
+    margin: 0 auto;
+}
+
+/* ========== HEADER ========== */
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: #ffffff;
+    padding: 14px 28px;
+    border-radius: 50px;
+    border: 1px solid #c8dbc8;
+    margin-bottom: 14px;
+}
+
+.logo i {
+    font-size: 20px;
+    color: #2d7a2d;
+}
+
+.logo h1 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #1a2e1a;
+    letter-spacing: -0.3px;
+}
+
+.logo span {
+    background: #d4ef5a;
+    color: #2a4a00;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 50px;
+}
+
+.subtitle {
+    color: #5a7a5a;
+    font-size: 13px;
+}
+
+/* ========== FORM CARD ========== */
+.form-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 36px;
+    border: 1px solid #c8dbc8;
+}
+
+.form-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a2e1a;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #e8f0e8;
+}
+
+.form-title i {
+    color: #2d7a2d;
+    font-size: 16px;
+}
+
+/* ========== FORM GROUPS ========== */
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #3a5a3a;
+    margin-bottom: 7px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.form-group label i {
+    color: #2d7a2d;
+    margin-right: 5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid #c8dbc8;
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #1a2e1a;
+    background: #fafcfa;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #2d7a2d;
+    box-shadow: 0 0 0 3px rgba(45, 122, 45, 0.10);
+    background: #ffffff;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #a0b8a0;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 88px;
+}
+
+.row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+/* ========== BUTTON ========== */
+.btn-primary {
+    width: 100%;
+    background: #2d7a2d;
+    color: #ffffff;
+    border: none;
+    padding: 13px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    letter-spacing: 0.1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+    transition: background 0.18s ease, transform 0.14s ease;
+}
+
+.btn-primary:hover {
+    background: #236023;
+    transform: translateY(-1px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* ========== SUCCESS ========== */
+.success-message {
+    background: #edfaed;
+    color: #1a6b1a;
+    padding: 11px 16px;
+    border-radius: 10px;
+    margin-top: 14px;
+    font-size: 13px;
+    font-weight: 500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid #b8e8b8;
+}
+
+.success-message.show {
+    display: flex;
+    animation: fadeUp 0.25s ease forwards;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== DASHBOARD LINK ========== */
+.dashboard-link {
+    text-align: center;
+    margin: 24px 0 14px;
+}
+
+.dashboard-link a {
+    color: #3a5a3a;
+    text-decoration: none;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 1px solid #c8dbc8;
+    background: #ffffff;
+    transition: all 0.18s ease;
+}
+
+.dashboard-link a:hover {
+    background: #d4ef5a;
+    border-color: #b8d430;
+    color: #1a3a00;
+}
+
+footer {
+    text-align: center;
+    font-size: 11px;
+    color: #a0b8a0;
+    padding-top: 14px;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 540px) {
+    body { padding: 24px 14px 40px; }
+    .form-card { padding: 22px 18px; }
+    .row-2 { grid-template-columns: 1fr; gap: 0; }
+}
