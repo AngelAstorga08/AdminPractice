@@ -1,33 +1,95 @@
 // ========== DASHBOARD.JS - GESTIONAR TAREAS ==========
 // TaskManager Pro - Gestión de tareas
-// Versión: 2.2.0
+// Versión: 2.3.0
 
 let tasks = [];
 let editingTaskId = null;
 let categoryChart = null;
 
-// ========== FUNCIONES PRINCIPALES ==========
+// ========== CONSTANTES ==========
+
+const CATEGORY_NAMES = {
+    personal: 'Personal',
+    trabajo: 'Trabajo',
+    estudio: 'Estudio',
+    hogar: 'Hogar',
+    proyecto: 'Proyecto'
+};
+
+const PRIORITY_NAMES = {
+    baja: 'Baja',
+    media: 'Media',
+    alta: 'Alta',
+    urgente: 'Urgente'
+};
+
+const CATEGORY_COLORS = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
+
+// ========== UTILIDADES ==========
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>"']/g, m => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    }[m]));
+}
+
+function formatDate(dateStr) {
+    if (!dateStr) return { text: 'Sin fecha', class: '' };
+    const today = new Date().toISOString().split('T')[0];
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowStr = tomorrow.toISOString().split('T')[0];
+
+    const [year, month, day] = dateStr.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
+    const formatted = date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+
+    if (dateStr === today) return { text: '📅 Hoy', class: 'today' };
+    if (dateStr === tomorrowStr) return { text: '📅 Mañana', class: '' };
+    if (dateStr < today) return { text: `⚠️ ${formatted}`, class: 'overdue' };
+    return { text: formatted, class: '' };
+}
+
+// ========== ALMACENAMIENTO ==========
 
 function loadTasks() {
-    const saved = localStorage.getItem('taskmanager_tasks_pro');
-    tasks = saved ? JSON.parse(saved) : [];
+    try {
+        const saved = localStorage.getItem('taskmanager_tasks_pro');
+        tasks = saved ? JSON.parse(saved) : [];
+    } catch (e) {
+        console.error('Error al leer tareas del localStorage:', e);
+        tasks = [];
+    }
     renderAll();
 }
 
 function saveTasks() {
-    localStorage.setItem('taskmanager_tasks_pro', JSON.stringify(tasks));
+    try {
+        localStorage.setItem('taskmanager_tasks_pro', JSON.stringify(tasks));
+    } catch (e) {
+        console.error('Error al guardar tareas:', e);
+    }
     renderAll();
 }
 
 function addActivity(action, taskTitle) {
-    const activities = JSON.parse(localStorage.getItem('taskmanager_activity') || '[]');
-    activities.unshift({
-        id: Date.now(),
-        action: action,
-        taskTitle: taskTitle,
-        timestamp: new Date().toISOString()
-    });
-    localStorage.setItem('taskmanager_activity', JSON.stringify(activities.slice(0, 50)));
+    try {
+        const activities = JSON.parse(localStorage.getItem('taskmanager_activity') || '[]');
+        activities.unshift({
+            id: Date.now(),
+            action: action,
+            taskTitle: taskTitle,
+            timestamp: new Date().toISOString()
+        });
+        localStorage.setItem('taskmanager_activity', JSON.stringify(activities.slice(0, 50)));
+    } catch (e) {
+        console.error('Error al registrar actividad:', e);
+    }
 }
 
 // ========== CRUD OPERACIONES ==========
@@ -36,8 +98,8 @@ function toggleTaskStatus(id) {
     const task = tasks.find(t => t.id === id);
     if (task) {
         task.completed = !task.completed;
-        saveTasks();
         addActivity(task.completed ? 'completed' : 'pending', task.title);
+        saveTasks();
     }
 }
 
@@ -54,8 +116,8 @@ function updateTask(id, updatedData) {
     const index = tasks.findIndex(t => t.id === id);
     if (index !== -1) {
         tasks[index] = { ...tasks[index], ...updatedData };
-        saveTasks();
         addActivity('updated', tasks[index].title);
+        saveTasks();
         closeEditModal();
     }
 }
@@ -71,26 +133,6 @@ function getStats() {
     return { total, completed, pending, overdue };
 }
 
-function formatDate(dateStr) {
-    if (!dateStr) return { text: 'Sin fecha', class: '' };
-    const today = new Date().toISOString().split('T')[0];
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const tomorrowStr = tomorrow.toISOString().split('T')[0];
-
-    // Parsear la fecha como local para evitar desfase de zona horaria
-    const [year, month, day] = dateStr.split('-').map(Number);
-    const date = new Date(year, month - 1, day);
-    const formatted = date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
-
-    if (dateStr === today) return { text: '📅 Hoy', class: 'today' };
-    if (dateStr === tomorrowStr) return { text: '📅 Mañana', class: '' };
-    if (dateStr < today) return { text: `⚠️ ${formatted}`, class: 'overdue' };
-    return { text: formatted, class: '' };
-}
-
-// ========== GRÁFICA ==========
-
 function getCategoryStats() {
     const categories = { personal: 0, trabajo: 0, estudio: 0, hogar: 0, proyecto: 0 };
     tasks.forEach(task => {
@@ -99,54 +141,6 @@ function getCategoryStats() {
         }
     });
     return categories;
-}
-
-function renderChart() {
-    const categories = getCategoryStats();
-    const categoryNames = {
-        personal: 'Personal',
-        trabajo: 'Trabajo',
-        estudio: 'Estudio',
-        hogar: 'Hogar',
-        proyecto: 'Proyecto'
-    };
-    const categoryColors = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
-
-    const catCtx = document.getElementById('categoryChart')?.getContext('2d');
-    if (catCtx) {
-        if (categoryChart) categoryChart.destroy();
-        const categoryData = Object.values(categories);
-        const categoryLabels = Object.keys(categories).map(k => categoryNames[k]);
-
-        categoryChart = new Chart(catCtx, {
-            type: 'doughnut',
-            data: {
-                labels: categoryLabels,
-                datasets: [{
-                    data: categoryData,
-                    backgroundColor: categoryColors,
-                    borderWidth: 0,
-                    hoverOffset: 10
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: { position: 'bottom' },
-                    tooltip: {
-                        callbacks: {
-                            label: function (context) {
-                                const total = categoryData.reduce((a, b) => a + b, 0);
-                                const percentage = total === 0 ? 0 : ((context.raw / total) * 100).toFixed(1);
-                                return `${context.label}: ${context.raw} tareas (${percentage}%)`;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    }
 }
 
 // ========== RENDERIZADO ==========
@@ -159,15 +153,44 @@ function renderStats() {
     document.getElementById('overdueTasks').textContent = stats.overdue;
 }
 
-function escapeHtml(str) {
-    if (!str) return '';
-    return str.replace(/[&<>"']/g, m => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;'
-    }[m]));
+function renderChart() {
+    const categories = getCategoryStats();
+    const catCtx = document.getElementById('categoryChart')?.getContext('2d');
+    if (!catCtx) return;
+
+    if (categoryChart) categoryChart.destroy();
+
+    const categoryData = Object.values(categories);
+    const categoryLabels = Object.keys(categories).map(k => CATEGORY_NAMES[k]);
+
+    categoryChart = new Chart(catCtx, {
+        type: 'doughnut',
+        data: {
+            labels: categoryLabels,
+            datasets: [{
+                data: categoryData,
+                backgroundColor: CATEGORY_COLORS,
+                borderWidth: 0,
+                hoverOffset: 10
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { position: 'bottom' },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            const total = categoryData.reduce((a, b) => a + b, 0);
+                            const percentage = total === 0 ? 0 : ((context.raw / total) * 100).toFixed(1);
+                            return `${context.label}: ${context.raw} tareas (${percentage}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
 }
 
 function renderTasks() {
@@ -185,17 +208,10 @@ function renderTasks() {
             (t.description && t.description.toLowerCase().includes(searchTerm))
         );
     }
-    if (categoryFilter !== 'all') {
-        filtered = filtered.filter(t => t.category === categoryFilter);
-    }
-    if (priorityFilter !== 'all') {
-        filtered = filtered.filter(t => t.priority === priorityFilter);
-    }
-    if (statusFilter === 'pending') {
-        filtered = filtered.filter(t => !t.completed);
-    } else if (statusFilter === 'completed') {
-        filtered = filtered.filter(t => t.completed);
-    }
+    if (categoryFilter !== 'all') filtered = filtered.filter(t => t.category === categoryFilter);
+    if (priorityFilter !== 'all') filtered = filtered.filter(t => t.priority === priorityFilter);
+    if (statusFilter === 'pending') filtered = filtered.filter(t => !t.completed);
+    else if (statusFilter === 'completed') filtered = filtered.filter(t => t.completed);
 
     if (filtered.length === 0) {
         container.innerHTML = `
@@ -205,20 +221,6 @@ function renderTasks() {
             </div>`;
         return;
     }
-
-    const categoryNames = {
-        personal: 'Personal',
-        trabajo: 'Trabajo',
-        estudio: 'Estudio',
-        hogar: 'Hogar',
-        proyecto: 'Proyecto'
-    };
-    const priorityNames = {
-        baja: 'Baja',
-        media: 'Media',
-        alta: 'Alta',
-        urgente: 'Urgente'
-    };
 
     container.innerHTML = filtered.map(task => {
         const dateInfo = formatDate(task.dueDate);
@@ -235,8 +237,8 @@ function renderTasks() {
                     <div class="task-title ${task.completed ? 'completed' : ''}">${escapeHtml(task.title)}</div>
                     ${descHtml}
                 </div>
-                <div><span class="category-badge ${task.category}">${categoryNames[task.category] || task.category}</span></div>
-                <div><span class="priority-badge ${task.priority}">${priorityNames[task.priority] || task.priority}</span></div>
+                <div><span class="category-badge ${task.category}">${CATEGORY_NAMES[task.category] || task.category}</span></div>
+                <div><span class="priority-badge ${task.priority}">${PRIORITY_NAMES[task.priority] || task.priority}</span></div>
                 <div><span class="due-date ${dateInfo.class}"><i class="far fa-calendar"></i> ${dateInfo.text}</span></div>
                 <div class="status-badge">
                     <span style="background: ${task.completed ? '#D1FAE5' : '#FEF3C7'}; padding: 4px 12px; border-radius: 20px; font-size: 11px;">
@@ -318,14 +320,12 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('cancelEditBtn')?.addEventListener('click', closeEditModal);
     document.getElementById('saveEditBtn')?.addEventListener('click', saveEdit);
 
-    // Cerrar modal con Escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && document.getElementById('editModal').classList.contains('active')) {
             closeEditModal();
         }
     });
 
-    // Cerrar modal al hacer click en el fondo
     document.getElementById('editModal')?.addEventListener('click', function (e) {
         if (e.target === this) closeEditModal();
     });
